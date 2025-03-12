@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSBA</title>
+    <style>
+        body {
+            background-color: green;
+            text-align: center;
+        }
+
+        button {
+            height: 30px;
+            width: 100px;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Just code you JSBA now!</h1>
+    <textarea id="mytext" rows="10" cols="80"></textarea>
+    <br>
+    <button id="mybutton" onclick="hi()">Run now</button>
+    <pre id="output"></pre>
+    <script>
+        const textarea = document.getElementById('mytext');
+        const button = document.getElementById('mybutton');
+        const output = document.getElementById('output');
+
+        function hi() {
+            const text = textarea.value;
+            const lines = text.split('\n');
+            const lineCount = lines.length;
+            let htmlContent = '';
+            let styleContent = '';
+            let JSContent = '';
+            let JS = '</script'+'>';
+
+            for (let i = 0; i < lineCount; i++) {
+                let nei = lines[i].trim();
+                if (nei) {
+                    const parts = nei.split(':');
+                    if (parts.length === 2) {
+                        const start = parts[0];
+                        const end = parts[1];
+                        if (start === "world") {
+                            htmlContent += `<p>${end}</p>`;
+                        } else if (start === "title") {
+                            htmlContent += `<h1>${end}</h1>`;
+                        } else if (start === "bodycolor") {
+                            styleContent += `body { background-color: ${end}; }`;
+                        } else if (start === "alert") {
+                            JSContent += `alert("${end}");`;
+                        } else if (start === "alltext-center") {
+                            styleContent += `body { text-align: center; }`;
+                        } else if (start === "line-center") {
+                            styleContent += `body { display: block; margin: 0 auto; }`;
+                        } 
+                        else if (start === "other") {
+                            htmlContent +=  end;
+                        }else {
+                            htmlContent += `<p>${nei}</p>`;
+                        }
+                    } else if (parts.length === 3 && parts[0] === "a") {
+                        const href = parts[1];
+                        const text = parts[2];
+                        htmlContent += `<a href="${href}">${text}</a>`;
+                    }else if (parts.length === 5 && parts[0] === "photo") {
+                        const href = parts[1];
+                        const text = parts[2];
+                        const width = parts[3];
+                        const height = parts[4];
+                        htmlContent += `<a href="${href}" width="${width}" width="${height}">${text}</a>`;
+                    }
+                    else if (parts.length === 4 && parts[0] === "input") {
+                        const id = parts[1];
+                        const width = parts[2];
+                        const height = parts[3];
+                        htmlContent += `<input width="${width}" width="${height}" id="${id}">`;
+                    }
+                    else {
+                        htmlContent += `<p>${nei}</p>`;
+                    }
+                }
+            }
+
+            let fullHtml = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>This is a website</title>
+    <style>
+        ${styleContent}
+    </style>
+</head>
+<body>
+    ${htmlContent}
+    <script>
+        ${JSContent}
+    ${JS}
+</body>
+</html>`;
+
+           
+            output.textContent = fullHtml;
+        }
+    </script>
+</body>
+
+</html>
